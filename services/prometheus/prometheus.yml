@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'node'
+    static_configs:
+      - targets:
+          - 'lucy-steve.lan:9100'
+          - 'ukko-development-pc.lan:9100'
+          - 'ukko-media-client-1.lan:9100'
+          - 'ukko-media-client-2.lan:9100'
+          - 'ukko-media-client-3.lan:9100'
+          - 'ukko-raspberrypi-1.lan:9100'
+          - 'ukko-server-1.lan:9100'
+  - job_name: 'windows'
+    static_configs:
+      - targets:
+          - 'ukko-ukonvasara.lan:9182'

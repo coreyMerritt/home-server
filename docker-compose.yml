@@ -1,0 +1,83 @@
+services:
+  adguardhome:
+    extends:
+      file: "./services/AdGuardHome/docker-compose.yml"
+      service: "adguardhome"
+    networks:
+      - "proxy_net"
+
+  grafana:
+    extends:
+      file: "./services/grafana/docker-compose.yml"
+      service: "grafana"
+    networks:
+      - "proxy_net"
+
+  jellyfin:
+    extends:
+      file: "./services/jellyfin/docker-compose.yml"
+      service: "jellyfin"
+    networks:
+      - "proxy_net"
+
+  job_listing_data_manager:
+    extends:
+      file: "./services/job-listing-data-manager/docker-compose.yml"
+      service: "job_listing_data_manager"
+    networks:
+      - "proxy_net"
+
+  job_listing_data_manager_postgres:
+    extends:
+      file: "./services/job-listing-data-manager/docker-compose.yml"
+      service: "job_listing_data_manager_postgres"
+    networks:
+      - "proxy_net"
+
+  job_listing_gui:
+    extends:
+      file: "./services/job-listing-gui/docker-compose.yml"
+      service: "job_listing_gui"
+    networks:
+      - "proxy_net"
+
+  nginx:
+    extends:
+      file: "./services/nginx/docker-compose.yml"
+      service: "nginx"
+    networks:
+      - "proxy_net"
+
+  node_exporter:
+    extends:
+      file: "./services/node_exporter/docker-compose.yml"
+      service: "node_exporter"
+
+  prometheus:
+    extends:
+      file: "./services/prometheus/docker-compose.yml"
+      service: "prometheus"
+    networks:
+      - "proxy_net"
+
+  sc2_data_manager:
+    extends:
+      file: "./services/sc2_data_manager/docker-compose.yml"
+      service: "sc2_data_manager"
+    networks:
+      - "proxy_net"
+
+networks:
+  proxy_net:
+    driver: "bridge"
+volumes:
+  job_listing_data_manager_config:
+    external: true
+    name: "job_listing_data_manager_1.0.0"    # Awful name but its not easy to fix. Heck.
+  postgres_data:
+    external: true
+    name: "postgres-18-job-listing-data-manager-volume"
+  sc2_data_manager:
+    external: true
+    name: "sc2_data_manager_1.0.0"    # Awful name but its not easy to fix. Heck.
+

@@ -1,0 +1,12 @@
+services:
+  nginx:
+    container_name: "nginx"
+    image: "nginx:stable-alpine"
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: "unless-stopped"
+    volumes:
+      - "./certs:/etc/nginx/certs:Z"
+      - "./conf.d:/etc/nginx/conf.d:Z"
+      - "./snippets:/etc/nginx/snippets:Z"

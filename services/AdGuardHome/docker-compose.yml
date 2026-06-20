@@ -1,0 +1,13 @@
+services:
+  adguardhome:
+    container_name: "AdGuardHome"
+    image: "adguard/adguardhome:latest"
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "13571:13571"
+    restart: "unless-stopped"
+    user: "1001:1000"
+    volumes:
+      - "./conf:/opt/adguardhome/conf:Z"
+      - "./data:/opt/adguardhome/work:Z"

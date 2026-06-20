@@ -1,0 +1,29 @@
+services:
+  jellyfin:
+    container_name: "jellyfin"
+    devices:
+      - "/dev/dri:/dev/dri"
+    environment:
+      - "JELLYFIN_BIND_ADDR=0.0.0.0"
+      - "JELLYFIN_DATA_DIR=/config"
+      - "JELLYFIN_CACHE_DIR=/cache"
+      - "JELLYFIN_CONFIG_DIR=/config/config"
+      - "JELLYFIN_LOG_DIR=/config/log"
+      - "JELLYFIN_WEB_DIR=/jellyfin/jellyfin-web"
+      - "JELLYFIN_FFMPEG=/usr/lib/jellyfin-ffmpeg/ffmpeg"
+      - "XDG_CACHE_HOME=/cache"
+    healthcheck:
+      test: ["CMD-SHELL", "curl --noproxy 'localhost' -Lk -fsS http://localhost:8096/health || exit 1"]
+      interval: "30s"
+      timeout: "30s"
+      retries: 3
+      start_period: "10s"
+    image: "jellyfin/jellyfin:latest"
+    ports:
+      - "8086:8096"
+    restart: "unless-stopped"
+    user: "1001:1000"
+    volumes:
+      - "./config:/config:Z"
+      - "./cache:/cache:Z"
+      - "/mnt/Media-WD-B01LG78D:/media:Z"

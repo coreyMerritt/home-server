@@ -1,0 +1,32 @@
+services:
+  job_listing_data_manager:
+    container_name: "job-listing-data-manager"
+    depends_on:
+      - "job_listing_data_manager_postgres"
+    entrypoint: ["./run-server.sh"]
+    env_file:
+      - "./.env"
+    image: "ghcr.io/coreymerritt/job-listing-data-manager:1.0.0"
+    ports:
+      - "7937:7937"
+    restart: "unless-stopped"
+    volumes:
+      - "job_listing_data_manager_config:/etc/job_listing_data_manager"
+    working_dir: "/app"
+  job_listing_data_manager_postgres:
+    container_name: "job-listing-data-manager-postgres"
+    env_file:
+      - "./.env"
+    image: "postgres:18"
+    ports:
+      - "5434:5432"
+    restart: "unless-stopped"
+    volumes:
+      - "postgres_data:/var/lib/postgresql"
+volumes:
+  job_listing_data_manager_config:
+    external: true
+    name: "job_listing_data_manager_1.0.0"
+  postgres_data:
+    external: true
+    name: "postgres-18-job-listing-data-manager-volume"

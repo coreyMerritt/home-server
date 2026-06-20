@@ -1,0 +1,8 @@
+services:
+  job_listing_gui:
+    container_name: "job-listing-gui"
+    image: "ghcr.io/coreymerritt/job-listing-gui:1.0.0"
+    ports:
+      - "790:790"
+    restart: "unless-stopped"
+    working_dir: "/app"

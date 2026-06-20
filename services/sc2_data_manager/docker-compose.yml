@@ -1,0 +1,19 @@
+services:
+  sc2_data_manager:
+    container_name: "sc2-data-manager"
+    entrypoint: ["./run-server.sh"]
+    env_file:
+      - "./.env"
+    image: "ghcr.io/coreymerritt/private.sc2-data-manager:1.0.0"
+    ports:
+      - "23231:23231"
+    restart: "unless-stopped"
+    volumes:
+      - "./data/sc2-data-manager.db:/app/sc2-data-manager.db:Z"
+      - "/mnt/Misc-Unknown/sc2-data-manager:/sc2-data-manager:Z"
+      - "sc2_data_manager:/etc/sc2_data_manager"
+    working_dir: "/app"
+volumes:
+  sc2_data_manager:
+    external: true
+    name: "sc2_data_manager_1.0.0"

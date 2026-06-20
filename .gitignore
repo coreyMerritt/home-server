@@ -1,0 +1,19 @@
+# Directories
+services/AdGuardHome/data/
+services/grafana/data/
+services/jellyfin/cache/
+services/jellyfin/config/data/
+services/jellyfin/config/log/
+services/jellyfin/config/metadata/
+services/jellyfin/config/root/
+services/jellyfin/config/plugins/
+services/prometheus/data/
+services/sc2_data_manager/data/
+
+# Files
+services/jellyfin/config/.jellyfin-data
+services/job-listing-data-manager/.env
+services/sc2_data_manager/.env
+
+# Wildcard Matching
+services/nginx/certs/*-key.pem

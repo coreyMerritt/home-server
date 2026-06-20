@@ -1,0 +1,11 @@
+
+module jellyfin_media 1.0;
+
+require {
+	type container_t;
+	type dosfs_t;
+	class file read;
+}
+
+#============= container_t ==============
+allow container_t dosfs_t:file read;
