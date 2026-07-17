@@ -89,4 +89,5 @@ kubectl apply -f "./services/jellyfin/pvc.yml"
 kubectl apply -f "./services/jellyfin/deployment.yml"
 kubectl apply -f "./services/jellyfin/svc.yml"
 kubectl apply -f "./services/jellyfin/ingress.yml"
+kubectl apply -f "./services/jellyfin/job.backup-config.yml"
 

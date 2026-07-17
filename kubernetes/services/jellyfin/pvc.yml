@@ -10,16 +10,3 @@ spec:
   resources:
     requests:
       storage: 15Gi
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: jellyfin-cache
-  namespace: jellyfin
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: longhorn-single-replica
-  resources:
-    requests:
-      storage: 10Gi

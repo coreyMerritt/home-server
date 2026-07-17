@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: jellyfin-config-backup
+  namespace: jellyfin
+spec:
+  schedule: "0 3 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: instrumentisto/rsync-ssh:latest
+              command:
+                - sh
+                - -c
+                - |
+                  set -e
+                  DEST="/backup/jellyfin/config"
+                  mkdir -p "$DEST"
+                  rsync -a --delete --progress /source/ "$DEST/"
+                  echo "Synced $(date) -- $(du -sh "$DEST" | cut -f1)"
+              volumeMounts:
+                - name: source
+                  mountPath: /source
+                  readOnly: true
+                - name: backup-target
+                  mountPath: /backup
+          volumes:
+            - name: source
+              persistentVolumeClaim:
+                claimName: jellyfin-config
+            - name: backup-target
+              nfs:
+                server: nfs-server.lan
+                path: /misc/prod-data-backups
