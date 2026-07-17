@@ -1,0 +1,56 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: job-listing-data-manager-postgres-backup
+  namespace: job-listing
+spec:
+  schedule: "0 3 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: postgres:18
+              command:
+                - sh
+                - -c
+                - |
+                  set -euo pipefail
+                  mkdir -p "$DESTINATION"
+                  TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+                  FILE="${DESTINATION}/postgres-${TIMESTAMP}.dump"
+                  PGPASSWORD="$POSTGRES_PASSWORD" pg_dump \
+                    -h "$POSTGRES_HOST" \
+                    -U "$POSTGRES_USER" \
+                    -d "$POSTGRES_DB" \
+                    -F c \
+                    -f "$FILE"
+                  echo "Synced $(date) -- $(du -sh "$FILE" | cut -f1)"
+                  # Delete anything older than 14 days so this doesn't grow forever
+                  find "$DESTINATION" -name '*.dump' -mtime +14 -delete
+              env:
+                - name: DESTINATION
+                  value: "/backup/job-listing-data-manager/postgres"
+                - name: TZ
+                  value: "America/New_York"
+                - name: POSTGRES_HOST
+                  value: "postgres"
+              envFrom:
+                - configMapRef:
+                    name: job-listing-data-manager
+                - secretRef:
+                    name: job-listing-data-manager
+              volumeMounts:
+                - name: backup-target
+                  mountPath: /backup
+          volumes:
+            - name: backup-target
+              nfs:
+                server: nfs-server.lan
+                path: /misc/prod-data-backups

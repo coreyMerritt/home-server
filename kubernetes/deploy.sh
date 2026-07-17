@@ -75,21 +75,13 @@ helm upgrade \
 # Node Exporter
 kubectl apply -f "./services/node-exporter/daemon-set.node-exporter.yml"
 
-# Prometheus
-kubectl apply -f "./services/prometheus/persistent-volume-claim.prometheus-data.yml"
-kubectl apply -f "./services/prometheus/service-account.prometheus.yml"
-kubectl apply -f "./services/prometheus/cluster-role.prometheus.yml"
-kubectl apply -f "./services/prometheus/cluster-role-binding.prometheus.yml"
-kubectl apply -f "./services/prometheus/config-map.prometheus-config.yml"
-kubectl apply -f "./services/prometheus/deployment.prometheus.yml"
-kubectl apply -f "./services/prometheus/service.prometheus.yml"
-kubectl apply -f "./services/prometheus/ingress.prometheus.yml"
-
-# Grafana
-kubectl apply -f "./services/grafana/persistent-volume-claim.grafana-data.yml"
-kubectl apply -f "./services/grafana/deployment.grafana.yml"
-kubectl apply -f "./services/grafana/service.grafana.yml"
-kubectl apply -f "./services/grafana/ingress.grafana.yml"
+# Jellyfin
+kubectl apply -f "./services/jellyfin/persistent-volume-claim.media-library.yml"
+kubectl apply -f "./services/jellyfin/persistent-volume-claim.jellyfin-config.yml"
+kubectl apply -f "./services/jellyfin/deployment.jellyfin.yml"
+kubectl apply -f "./services/jellyfin/service.jellyfin.yml"
+kubectl apply -f "./services/jellyfin/ingress.jellyfin.yml"
+kubectl apply -f "./services/jellyfin/cron-job.jellyfin-config-backup.yml"
 
 # Job Listing Data Manager
 kubectl apply -f "./services/job-listing-data-manager/config-map.job-listing-data-manager-config.yml"
@@ -101,11 +93,31 @@ kubectl apply -f "./services/job-listing-data-manager/persistent-volume-claim.jo
 kubectl apply -f "./services/job-listing-data-manager/deployment.job-listing-data-manager.yml"
 kubectl apply -f "./services/job-listing-data-manager/service.job-listing-data-manager.yml"
 kubectl apply -f "./services/job-listing-data-manager/ingress.job-listing-data-manager.yml"
+kubectl apply -f "./services/job-listing-data-manager/cron-job.job-listing-data-manager-config-backup.yml"
+kubectl apply -f "./services/job-listing-data-manager/cron-job.job-listing-data-manager-postgres-backup.yml"
 
 # Job Listing GUI
 kubectl apply -f "./services/job-listing-gui/deployment.job-listing-gui.yml"
 kubectl apply -f "./services/job-listing-gui/service.job-listing-gui.yml"
 kubectl apply -f "./services/job-listing-gui/ingress.job-listing-gui.yml"
+
+# Prometheus
+kubectl apply -f "./services/prometheus/persistent-volume-claim.prometheus-data.yml"
+kubectl apply -f "./services/prometheus/service-account.prometheus.yml"
+kubectl apply -f "./services/prometheus/cluster-role.prometheus.yml"
+kubectl apply -f "./services/prometheus/cluster-role-binding.prometheus.yml"
+kubectl apply -f "./services/prometheus/config-map.prometheus-config.yml"
+kubectl apply -f "./services/prometheus/deployment.prometheus.yml"
+kubectl apply -f "./services/prometheus/service.prometheus.yml"
+kubectl apply -f "./services/prometheus/ingress.prometheus.yml"
+kubectl apply -f "./services/prometheus/cron-job.prometheus-data-backup.yml"
+
+# Grafana
+kubectl apply -f "./services/grafana/persistent-volume-claim.grafana-data.yml"
+kubectl apply -f "./services/grafana/deployment.grafana.yml"
+kubectl apply -f "./services/grafana/service.grafana.yml"
+kubectl apply -f "./services/grafana/ingress.grafana.yml"
+kubectl apply -f "./services/grafana/cron-job.grafana-data-backup.yml"
 
 # SC2 Data Manager
 kubectl apply -f "./services/sc2-data-manager/config-map.sc2-data-manager.yml"
@@ -115,12 +127,6 @@ kubectl apply -f "./services/sc2-data-manager/persistent-volume-claim.sc2-data-m
 kubectl apply -f "./services/sc2-data-manager/deployment.sc2-data-manager.yml"
 kubectl apply -f "./services/sc2-data-manager/service.sc2-data-manager.yml"
 kubectl apply -f "./services/sc2-data-manager/ingress.sc2-data-manager.yml"
-
-# Jellyfin
-kubectl apply -f "./services/jellyfin/persistent-volume-claim.media-library.yml"
-kubectl apply -f "./services/jellyfin/persistent-volume-claim.jellyfin-config.yml"
-kubectl apply -f "./services/jellyfin/deployment.jellyfin.yml"
-kubectl apply -f "./services/jellyfin/service.jellyfin.yml"
-kubectl apply -f "./services/jellyfin/ingress.jellyfin.yml"
-kubectl apply -f "./services/jellyfin/cron-job.jellyfin-config-backup.yml"
-
+kubectl apply -f "./services/sc2-data-manager/cron-job.sc2-data-manager-config-backup.yml"
+kubectl apply -f "./services/sc2-data-manager/cron-job.sc2-data-manager-db-backup.yml"
+kubectl apply -f "./services/sc2-data-manager/cron-job.sc2-data-manager-game-files-backup.yml"

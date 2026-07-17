@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: jellyfin-config-backup
-  namespace: jellyfin
+  name: sc2-data-manager-game-files-backup
+  namespace: sc2
 spec:
-  schedule: "0 1 * * *"
+  schedule: "0 7 * * *"
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
   concurrencyPolicy: Forbid
@@ -26,10 +26,10 @@ spec:
                   rsync -a --delete --backup --backup-dir="${DESTINATION}/.deleted/$(date +%Y-%m-%d_%H-%M-%S_%Z)" /source/ "${DESTINATION}/"
                   echo "Synced $(date) -- $(du -sh "${DESTINATION}" | cut -f1)"
               env:
-                - name: DESTINATION
-                  value: "/backup/jellyfin/config"
                 - name: TZ
                   value: "America/New_York"
+                - name: DESTINATION
+                  value: "/backup/sc2-data-manager/game-files"
               volumeMounts:
                 - name: source
                   mountPath: /source
@@ -39,7 +39,7 @@ spec:
           volumes:
             - name: source
               persistentVolumeClaim:
-                claimName: jellyfin-config
+                claimName: sc2-data-manager-game-files
             - name: backup-target
               nfs:
                 server: nfs-server.lan

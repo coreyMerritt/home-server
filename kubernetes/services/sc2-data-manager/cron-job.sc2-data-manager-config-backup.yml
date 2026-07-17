@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: jellyfin-config-backup
-  namespace: jellyfin
+  name: sc2-data-manager-config-backup
+  namespace: sc2
 spec:
-  schedule: "0 1 * * *"
+  schedule: "0 5 * * *"
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
   concurrencyPolicy: Forbid
@@ -27,7 +27,7 @@ spec:
                   echo "Synced $(date) -- $(du -sh "${DESTINATION}" | cut -f1)"
               env:
                 - name: DESTINATION
-                  value: "/backup/jellyfin/config"
+                  value: "/backup/sc2-data-manager/config"
                 - name: TZ
                   value: "America/New_York"
               volumeMounts:
@@ -39,7 +39,7 @@ spec:
           volumes:
             - name: source
               persistentVolumeClaim:
-                claimName: jellyfin-config
+                claimName: sc2-data-manager-config
             - name: backup-target
               nfs:
                 server: nfs-server.lan
