@@ -17,7 +17,6 @@ spec:
       hostNetwork: true
       hostPID: true
       tolerations:
-        # Ensure it schedules on all nodes, including tainted control-plane nodes
         - effect: NoSchedule
           operator: Exists
         - effect: NoExecute

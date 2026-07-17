@@ -6,7 +6,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: longhorn   # standard 3-replica class — plenty of headroom now
+  storageClassName: longhorn
   resources:
     requests:
-      storage: 5Gi   # dashboards/config/sqlite db — small footprint
+      storage: 5Gi

@@ -17,11 +17,9 @@ spec:
       labels:
         app: prometheus
     spec:
-      # No nodeSelector — the Longhorn-backed PVC can be attached on any node,
-      # so the scheduler is free to place this wherever there's room.
       serviceAccountName: prometheus
       securityContext:
-        fsGroup: 65534   # 'nobody' — matches prom/prometheus default user
+        fsGroup: 65534   # "nobody" — matches prom/prometheus default user
       containers:
         - name: prometheus
           image: prom/prometheus:latest

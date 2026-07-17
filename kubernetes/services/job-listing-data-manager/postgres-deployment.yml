@@ -18,7 +18,7 @@ spec:
         app: postgres
     spec:
       securityContext:
-        fsGroup: 999   # 'postgres' user in the official postgres:18 image
+        fsGroup: 999   # "postgres" user in the official postgres:18 image
       containers:
         - name: postgres
           image: postgres:18
@@ -32,7 +32,7 @@ spec:
                 name: jldm-secrets
           volumeMounts:
             - name: data
-              mountPath: /var/lib/postgresql   # same mount path as the compose file
+              mountPath: /var/lib/postgresql
           resources:
             requests:
               cpu: 100m

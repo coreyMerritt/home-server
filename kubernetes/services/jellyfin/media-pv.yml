@@ -4,10 +4,10 @@ metadata:
   name: media-library
 spec:
   capacity:
-    storage: 8Ti   # symbolic for NFS — not enforced, just informational
+    storage: 8Ti   # Symbolic for NFS -- not enforced -- just informational
   accessModes:
-    - ReadWriteMany   # many pods/nodes read the same real data, nothing duplicated
-  persistentVolumeReclaimPolicy: Retain   # never let k8s delete real media on PVC teardown
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain   # Never let k8s delete real media on PVC teardown
   nfs:
     server: nfs-server.lan
     path: /media

@@ -7,9 +7,9 @@ data:
   JLDM_CPU_CHECK_INTERVAL_SECONDS: "1.0"
   JLDM_CPU_MAXIMUM_HEALTHY_USAGE_PERCENTAGE: "90.0"
   JLDM_DATABASE_ENGINE: "postgresql"
-  JLDM_DATABASE_HOST: "postgres"   # k8s Service name, not ukko-server-1.lan
+  JLDM_DATABASE_HOST: "postgres"
   JLDM_DATABASE_NAME: "job-listing-data-manager-prod"
-  JLDM_DATABASE_PORT: "5432"       # standard in-cluster port, not the 5434 host mapping
+  JLDM_DATABASE_PORT: "5432"
   JLDM_DATABASE_USERNAME: "job-listing-data-manager-user"
   JLDM_DISK_MAXIMUM_HEALTHY_USAGE_PERCENTAGE: "90.0"
   JLDM_EXTERNAL_SERVICES_REQUEST_TIMEOUT: "15.0"
