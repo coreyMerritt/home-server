@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jldm-config
+  namespace: job-listing
+data:
+  JLDM_CPU_CHECK_INTERVAL_SECONDS: "1.0"
+  JLDM_CPU_MAXIMUM_HEALTHY_USAGE_PERCENTAGE: "90.0"
+  JLDM_DATABASE_ENGINE: "postgresql"
+  JLDM_DATABASE_HOST: "postgres"   # k8s Service name, not ukko-server-1.lan
+  JLDM_DATABASE_NAME: "job-listing-data-manager-prod"
+  JLDM_DATABASE_PORT: "5432"       # standard in-cluster port, not the 5434 host mapping
+  JLDM_DATABASE_USERNAME: "job-listing-data-manager-user"
+  JLDM_DISK_MAXIMUM_HEALTHY_USAGE_PERCENTAGE: "90.0"
+  JLDM_EXTERNAL_SERVICES_REQUEST_TIMEOUT: "15.0"
+  JLDM_GLOBAL_CONFIG_DIR: "/etc/job_listing_data_manager"
+  JLDM_LOGGER_JSON: "false"
+  JLDM_LOGGER_LEVEL: "debug"
+  JLDM_LOGGER_TIMEZONE: "UTC"
+  JLDM_MEMORY_MAXIMUM_HEALTHY_USAGE_PERCENTAGE: "90.0"
+  JLDM_MODEL_CONFIG_DIR: "./config/models"
+  JLDM_PROJECT_NAME: "job_listing_data_manager"
+  JLDM_TOKEN_ISSUER_TIME_TO_LIVE_DAYS: "365"
+  JLDM_UVICORN_ACCESS_LOG: "false"
+  JLDM_UVICORN_APP: "composition.webserver.hook:create_app"
+  JLDM_UVICORN_FACTORY: "true"
+  JLDM_UVICORN_HOST: "0.0.0.0"
+  JLDM_UVICORN_PORT: "7937"
+  JLDM_UVICORN_LOG_CONFIG: ".uvicorn.json"
+  JLDM_UVICORN_RELOAD: "true"
+  JLDM_UVICORN_SERVER_HEADER: "false"
+  PYTHONPATH: "src"
+  POSTGRES_DB: "job-listing-data-manager-prod"
+  POSTGRES_USER: "job-listing-data-manager-user"

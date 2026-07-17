@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: job-listing-data-manager
+  namespace: job-listing
+spec:
+  selector:
+    app: job-listing-data-manager
+  type: ClusterIP
+  ports:
+    - port: 7937
+      targetPort: 7937

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: job-listing-data-manager
+  namespace: job-listing
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - job-listing-data-manager.lan
+      secretName: job-listing-data-manager-tls
+  rules:
+    - host: job-listing-data-manager.lan
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: job-listing-data-manager
+                port:
+                  number: 7937

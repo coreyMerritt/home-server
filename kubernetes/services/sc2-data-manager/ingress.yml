@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sc2-data-manager
+  namespace: sc2
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - sc2-data-manager.lan
+      secretName: sc2-data-manager-tls
+  rules:
+    - host: sc2-data-manager.lan
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sc2-data-manager
+                port:
+                  number: 23231

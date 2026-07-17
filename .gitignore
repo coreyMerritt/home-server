@@ -17,3 +17,7 @@ services/sc2_data_manager/.env
 
 # Wildcard Matching
 services/nginx/certs/*-key.pem
+**/*secrets.yml
+**/*secrets.yaml
+!**/*secrets.yml.template
+!**/*secrets.yaml.template

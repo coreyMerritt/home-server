@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: job-listing-gui
+  namespace: job-listing
+spec:
+  selector:
+    app: job-listing-gui
+  type: ClusterIP
+  ports:
+    - port: 790
+      targetPort: 790

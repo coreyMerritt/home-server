@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job-listing-data-manager
+  namespace: job-listing
+  labels:
+    app: job-listing-data-manager
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: job-listing-data-manager
+  template:
+    metadata:
+      labels:
+        app: job-listing-data-manager
+    spec:
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      containers:
+        - name: job-listing-data-manager
+          image: ghcr.io/coreymerritt/job-listing-data-manager:cors-fix-cc017945-5935-4466-b29f-9bfeef4b655e
+          command: ["./run-server.sh"]
+          workingDir: /app
+          ports:
+            - containerPort: 7937
+              name: http
+          envFrom:
+            - configMapRef:
+                name: jldm-config
+            - secretRef:
+                name: jldm-secrets
+          volumeMounts:
+            - name: config
+              mountPath: /etc/job_listing_data_manager
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 2Gi
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: job-listing-data-manager-config

@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: observability
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 5s
+
+    scrape_configs:
+      # Dynamically discovers every node_exporter pod in the cluster via the
+      # Kubernetes API — new nodes/pods show up automatically, no manual edits.
+      - job_name: 'kubernetes-node-exporter'
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+                - observability
+        relabel_configs:
+          # Only keep pods from the node-exporter DaemonSet
+          - source_labels: [__meta_kubernetes_pod_label_app]
+            regex: node-exporter
+            action: keep
+          # hostNetwork means the pod IP *is* the node IP — point the scrape
+          # target at hostIP:9100 instead of the pod IP Prometheus would
+          # otherwise pick by default
+          - source_labels: [__meta_kubernetes_pod_host_ip]
+            action: replace
+            regex: (.+)
+            target_label: __address__
+            replacement: '${1}:9100'
+          # Attach the actual node name as a label for readability in queries
+          - source_labels: [__meta_kubernetes_pod_node_name]
+            target_label: node
+
+      # Non-cluster machines — anything not running as a k8s node_exporter pod.
+      # PRUNE this list: any hostname below that's ALSO a k8s cluster node will
+      # get scraped twice (once here, once via the job above) with different
+      # job labels. Not broken, just duplicated data — remove overlaps once you
+      # confirm which hosts have actually joined the cluster.
+      - job_name: 'node'
+        static_configs:
+          - targets:
+              - 'lucy-steve.lan:9100'
+              - 'ukko-development-pc.lan:9100'
+              - 'ukko-media-client-1.lan:9100'
+              - 'ukko-media-client-2.lan:9100'
+              - 'ukko-media-client-3.lan:9100'
+              - 'ukko-server-1.lan:9100'
+              - 'proxmox-1.lan:9100'
+              - 'proxmox-2.lan:9100'
+              - 'nfs-server.lan:9100'
+              - 'dns-server.lan:9100'
+
+      - job_name: 'windows'
+        static_configs:
+          - targets:
+              - 'ukko-ukonvasara.lan:9182'

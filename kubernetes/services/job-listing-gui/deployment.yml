@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job-listing-gui
+  namespace: job-listing
+  labels:
+    app: job-listing-gui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: job-listing-gui
+  template:
+    metadata:
+      labels:
+        app: job-listing-gui
+    spec:
+      imagePullSecrets:
+        - name: ghcr-pull-secret   # same secret already created for job-listing-data-manager
+      containers:
+        - name: job-listing-gui
+          image: ghcr.io/coreymerritt/job-listing-gui:1.0.0
+          workingDir: /app
+          ports:
+            - containerPort: 790
+              name: http
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
