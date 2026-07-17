@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: jldm-config
+  name: job-listing-data-manager
   namespace: job-listing
 data:
   JLDM_CPU_CHECK_INTERVAL_SECONDS: "1.0"

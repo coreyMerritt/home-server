@@ -18,7 +18,7 @@ spec:
         app: sc2-data-manager
     spec:
       imagePullSecrets:
-        - name: ghcr-pull-secret
+        - name: ghcr
       containers:
         - name: sc2-data-manager
           image: ghcr.io/coreymerritt/private.sc2-data-manager:1.0.0
@@ -29,9 +29,9 @@ spec:
               name: http
           envFrom:
             - configMapRef:
-                name: sc2-data-manager-config
+                name: sc2-data-manager
             - secretRef:
-                name: sc2-data-manager-secrets
+                name: sc2-data-manager
           volumeMounts:
             - name: db
               mountPath: /app/sc2-data-manager.db

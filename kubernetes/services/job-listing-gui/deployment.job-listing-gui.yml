@@ -16,7 +16,7 @@ spec:
         app: job-listing-gui
     spec:
       imagePullSecrets:
-        - name: ghcr-pull-secret
+        - name: ghcr
       containers:
         - name: job-listing-gui
           image: ghcr.io/coreymerritt/job-listing-gui:1.0.0

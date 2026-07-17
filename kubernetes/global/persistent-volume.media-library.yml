@@ -11,17 +11,3 @@ spec:
   nfs:
     server: nfs-server.lan
     path: /media
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: media-library
-  namespace: jellyfin
-spec:
-  accessModes:
-    - ReadWriteMany
-  storageClassName: ""   # empty on purpose — binds to the static PV above, no dynamic provisioner involved
-  resources:
-    requests:
-      storage: 8Ti
-  volumeName: media-library

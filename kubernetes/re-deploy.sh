@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+# Ensure our starting dir is standardized
+script_dir="$(dirname $(readlink -f $0))"
+cd "$script_dir"
+
 resource_kinds=(
   "deployment"
   "statefulset"

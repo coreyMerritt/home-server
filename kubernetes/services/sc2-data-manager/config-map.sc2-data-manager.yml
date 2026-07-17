@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: sc2-data-manager-config
+  name: sc2-data-manager
   namespace: sc2
 data:
   SC2_DATA_MANAGER_CPU_CHECK_INTERVAL_SECONDS: "1.0"

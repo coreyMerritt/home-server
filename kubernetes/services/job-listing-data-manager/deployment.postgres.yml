@@ -27,9 +27,9 @@ spec:
               name: postgres
           envFrom:
             - configMapRef:
-                name: jldm-config
+                name: job-listing-data-manager
             - secretRef:
-                name: jldm-secrets
+                name: job-listing-data-manager
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql
