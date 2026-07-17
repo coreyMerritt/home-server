@@ -19,6 +19,7 @@ find . -name '*secret.*.yml.template' -o -name '*secret.*.yaml.template' | while
   echo "Injecting: $template -> $output"
   op inject -i "$template" -o "$output" -f < /dev/null
   kubectl apply -f "$output"
+  rm -rf "$output"
 done
 
 # Global Resources
