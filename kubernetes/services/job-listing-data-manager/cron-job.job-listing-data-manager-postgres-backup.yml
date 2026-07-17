@@ -22,7 +22,7 @@ spec:
                 - -c
                 - |
                   set -euo pipefail
-                  mkdir -p "$DESTINATION"
+                  mkdir --parents "$DESTINATION"
                   TIMESTAMP=$(date +%Y%m%d-%H%M%S)
                   FILE="${DESTINATION}/postgres-${TIMESTAMP}.dump"
                   PGPASSWORD="$POSTGRES_PASSWORD" pg_dump \
@@ -35,8 +35,10 @@ spec:
                   # Delete anything older than 14 days so this doesn't grow forever
                   find "$DESTINATION" -name '*.dump' -mtime +14 -delete
               env:
+                - name: SOURCE
+                  value: "/prod-data"
                 - name: DESTINATION
-                  value: "/backup/job-listing-data-manager/postgres"
+                  value: "/prod-data-backups/job-listing-data-manager/postgres"
                 - name: TZ
                   value: "America/New_York"
                 - name: POSTGRES_HOST
@@ -47,10 +49,10 @@ spec:
                 - secretRef:
                     name: job-listing-data-manager
               volumeMounts:
-                - name: backup-target
-                  mountPath: /backup
+                - name: prod-data-backups
+                  mountPath: /prod-data-backups
           volumes:
-            - name: backup-target
+            - name: prod-data-backups
               nfs:
                 server: nfs-server.lan
                 path: /misc/prod-data-backups

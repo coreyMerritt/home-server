@@ -1,0 +1,58 @@
+# Before running: scale down the app so nothing is writing to (or holding
+# connections open against) the database during the restore --
+#   kubectl scale deployment/job-listing-data-manager -n job-listing --replicas=0
+#
+# After the restore completes and looks correct:
+#   kubectl scale deployment/job-listing-data-manager -n job-listing --replicas=1
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-listing-data-manager-postgres-restore
+  namespace: job-listing
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: restore
+          image: postgres:18
+          command:
+            - sh
+            - -c
+            - |
+              set -euo pipefail
+              FILE=$(ls -t "${SOURCE}"/*.dump | head -n1)
+              echo "Restoring from: ${FILE}"
+              PGPASSWORD="$POSTGRES_PASSWORD" pg_restore \
+                -h "$POSTGRES_HOST" \
+                -U "$POSTGRES_USER" \
+                -d "$POSTGRES_DB" \
+                --clean \
+                --if-exists \
+                --no-owner \
+                -v \
+                "$FILE"
+              echo "Restore complete: $(date)"
+          env:
+            - name: SOURCE
+              value: "/prod-data-backups/job-listing-data-manager/postgres"
+            - name: TZ
+              value: "America/New_York"
+            - name: POSTGRES_HOST
+              value: "postgres"
+          envFrom:
+            - configMapRef:
+                name: job-listing-data-manager
+            - secretRef:
+                name: job-listing-data-manager
+          volumeMounts:
+            - name: prod-data-backups
+              mountPath: /prod-data-backups
+              readOnly: true
+      volumes:
+        - name: prod-data-backups
+          nfs:
+            server: nfs-server.lan
+            path: /misc/prod-data-backups

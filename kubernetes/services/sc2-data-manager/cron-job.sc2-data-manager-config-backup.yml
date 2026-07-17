@@ -22,25 +22,35 @@ spec:
                 - -c
                 - |
                   set -euo pipefail
-                  mkdir -p "$DESTINATION"
-                  rsync -a --delete --backup --backup-dir="${DESTINATION}/.deleted/$(date +%Y-%m-%d_%H-%M-%S_%Z)" /source/ "${DESTINATION}/"
+                  mkdir --parents "$DESTINATION"
+                  rsync \
+                    --archive \
+                    --delete \
+                    --backup \
+                    --backup-dir "${BACKUP_DIR}/$(date +%Y-%m-%d_%H-%M-%S_%Z)" \
+                    "${SOURCE}/" \
+                    "${DESTINATION}/"
                   echo "Synced $(date) -- $(du -sh "${DESTINATION}" | cut -f1)"
               env:
+                - name: SOURCE
+                  value: "/prod-data"
                 - name: DESTINATION
-                  value: "/backup/sc2-data-manager/config"
+                  value: "/prod-data-backups/sc2-data-manager/config"
+                - name: BACKUP_DIR
+                  value: "/prod-data-backups/sc2-data-manager/config.deleted"
                 - name: TZ
                   value: "America/New_York"
               volumeMounts:
-                - name: source
-                  mountPath: /source
+                - name: prod-data
+                  mountPath: /prod-data
                   readOnly: true
-                - name: backup-target
-                  mountPath: /backup
+                - name: prod-data-backups
+                  mountPath: /prod-data-backups
           volumes:
-            - name: source
+            - name: prod-data
               persistentVolumeClaim:
                 claimName: sc2-data-manager-config
-            - name: backup-target
+            - name: prod-data-backups
               nfs:
                 server: nfs-server.lan
                 path: /misc/prod-data-backups

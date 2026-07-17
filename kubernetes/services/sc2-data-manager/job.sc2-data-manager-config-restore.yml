@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sc2-data-manager-config-restore
+  namespace: sc2
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: restore
+          image: instrumentisto/rsync-ssh:latest
+          command:
+            - sh
+            - -c
+            - |
+              set -euo pipefail
+              mkdir --parents "$DESTINATION"
+              rsync \
+                --archive \
+                --delete \
+                --backup \
+                --backup-dir "${BACKUP_DIR}/$(date +%Y-%m-%d_%H-%M-%S_%Z)" \
+                "${SOURCE}/" \
+                "${DESTINATION}/"
+              echo "Synced $(date) -- $(du -sh "${DESTINATION}" | cut -f1)"
+          env:
+            - name: SOURCE
+              value: "/prod-data-backups/sc2-data-manager/config"
+            - name: DESTINATION
+              value: "/prod-data"
+            - name: BACKUP_DIR
+              value: "/prod-data-backups/sc2-data-manager/config.deleted_during_restore"
+            - name: TZ
+              value: "America/New_York"
+          volumeMounts:
+            - name: prod-data
+              mountPath: /prod-data
+            - name: prod-data-backups
+              mountPath: /prod-data-backups
+      volumes:
+        - name: prod-data
+          persistentVolumeClaim:
+            claimName: sc2-data-manager-config
+        - name: prod-data-backups
+          nfs:
+            server: nfs-server.lan
+            path: /misc/prod-data-backups
