@@ -16,7 +16,7 @@ services/job-listing-data-manager/.env
 services/sc2_data_manager/.env
 
 # Wildcard Matching
-services/nginx/certs/*-key.pem
+*-key.pem
 **/*secret.*.yml
 **/*secret.*.yaml
 !**/*secret.*.yml.template
