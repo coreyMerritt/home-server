@@ -16,41 +16,27 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: backup
-              image: instrumentisto/rsync-ssh:latest
-              command:
-                - sh
-                - -c
-                - |
-                  set -euo pipefail
-                  mkdir --parents "$DESTINATION"
-                  rsync \
-                    --archive \
-                    --delete \
-                    --backup \
-                    --backup-dir "${BACKUP_DIR}/$(date +%Y-%m-%d_%H-%M-%S_%Z)" \
-                    "${SOURCE}/" \
-                    "${DESTINATION}/"
-                  echo "Synced $(date) -- $(du -sh "${DESTINATION}" | cut -f1)"
+              image: ghcr.io/coreymerritt/rsync:1.0.0
               env:
-                - name: SOURCE
-                  value: "/prod-data"
-                - name: DESTINATION
-                  value: "/prod-data-backups/sc2-data-manager/config"
-                - name: BACKUP_DIR
-                  value: "/prod-data-backups/sc2-data-manager/config.deleted"
                 - name: TZ
                   value: "America/New_York"
               volumeMounts:
-                - name: prod-data
-                  mountPath: /prod-data
+                - name: source
+                  mountPath: /source
                   readOnly: true
-                - name: prod-data-backups
-                  mountPath: /prod-data-backups
+                - name: destination
+                  mountPath: /destination
+                - name: backup
+                  mountPath: /backup
           volumes:
-            - name: prod-data
+            - name: source
               persistentVolumeClaim:
                 claimName: sc2-data-manager-config
-            - name: prod-data-backups
+            - name: destination
               nfs:
                 server: nfs-server.lan
-                path: /misc/prod-data-backups
+                path: /misc/prod-data-backups/sc2-data-manager/config
+            - name: backup
+              nfs:
+                server: nfs-server.lan
+                path: /misc/prod-data-backups/sc2-data-manager/config.deleted

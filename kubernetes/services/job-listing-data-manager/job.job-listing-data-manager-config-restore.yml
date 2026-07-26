@@ -10,40 +10,27 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: restore
-          image: instrumentisto/rsync-ssh:latest
-          command:
-            - sh
-            - -c
-            - |
-              set -euo pipefail
-              mkdir --parents "$DESTINATION"
-              rsync \
-                --archive \
-                --delete \
-                --backup \
-                --backup-dir "${BACKUP_DIR}/$(date +%Y-%m-%d_%H-%M-%S_%Z)" \
-                "${SOURCE}/" \
-                "${DESTINATION}/"
-              echo "Synced $(date) -- $(du -sh "${DESTINATION}" | cut -f1)"
+          image: ghcr.io/coreymerritt/rsync:1.0.0
           env:
-            - name: SOURCE
-              value: "/prod-data-backups/job-listing-data-manager/config"
-            - name: DESTINATION
-              value: "/prod-data"
-            - name: BACKUP_DIR
-              value: "/prod-data-backups/job-listing-data-manager/config.deleted_during_restore"
             - name: TZ
               value: "America/New_York"
           volumeMounts:
-            - name: prod-data
-              mountPath: /prod-data
-            - name: prod-data-backups
-              mountPath: /prod-data-backups
+            - name: source
+              mountPath: /source
+              readOnly: true
+            - name: destination
+              mountPath: /destination
+            - name: backup
+              mountPath: /backup
       volumes:
-        - name: prod-data
-          persistentVolumeClaim:
-            claimName: job-listing-data-manager-config
-        - name: prod-data-backups
+        - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups
+            path: /misc/prod-data-backups/job-listing-data-manager/config
+        - name: destination
+          persistentVolumeClaim:
+            claimName: job-listing-data-manager-config
+        - name: backup
+          nfs:
+            server: nfs-server.lan
+            path: /misc/prod-data-backups/job-listing-data-manager/config.deleted-during-restore
