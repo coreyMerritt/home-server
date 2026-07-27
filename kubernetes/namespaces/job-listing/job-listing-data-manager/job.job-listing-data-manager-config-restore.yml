@@ -1,13 +1,12 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: prometheus-data-restore
-  namespace: observability
+  name: job-listing-data-manager-config-restore
+  namespace: job-listing
 spec:
   backoffLimit: 2
   template:
     spec:
-      restartPolicy: OnFailure
       containers:
         - name: restore
           image: ghcr.io/coreymerritt/rsync:1.0.0
@@ -22,15 +21,18 @@ spec:
               mountPath: /destination
             - name: backup
               mountPath: /backup
+      imagePullSecrets:
+        - name: ghcr
+      restartPolicy: OnFailure
       volumes:
         - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/prometheus/data
+            path: /misc/prod-data-backups/job-listing-data-manager/config
         - name: destination
           persistentVolumeClaim:
-            claimName: prometheus-data
+            claimName: job-listing-data-manager-config
         - name: backup
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/prometheus/data.deleted-during-restore
+            path: /misc/prod-data-backups/job-listing-data-manager/config.deleted-during-restore

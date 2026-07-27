@@ -8,9 +8,9 @@ cd "$script_dir"
 
 # Namespaces
 dir_path="./namespaces"
-namespace_filenames="$(ls ${dir_path}/)"
-for namespace_filename in $namespace_filenames; do
-  kubectl apply -f "${dir_path}/${namespace_filename}"
+namespace_filepaths="$(find namespaces -name namespace.* -type f)"
+for namespace_filepath in $namespace_filepaths; do
+  kubectl apply -f "$namespace_filepath"
 done
 
 # All Services' Secrets
@@ -63,8 +63,8 @@ kubectl wait \
   --timeout=300s \
   --for=condition=Ready "pods" \
   --namespace "metallb-system" 
-kubectl apply -f "./services/metallb/ip-address-pool.homelab-pool.yml"
-kubectl apply -f "./services/metallb/l2-advertisement.homelab-l2.yml"
+kubectl apply -f "./namespaces/metallb-system/metallb/ip-address-pool.homelab-pool.yml"
+kubectl apply -f "./namespaces/metallb-system/metallb/l2-advertisement.homelab-l2.yml"
 
 # Ingress-xginx
 helm repo add "ingress-nginx" "https://kubernetes.github.io/ingress-nginx"
@@ -76,60 +76,60 @@ helm upgrade \
   --set "controller.service.type=LoadBalancer"
 
 # Node Exporter
-kubectl apply -f "./services/node-exporter/daemon-set.node-exporter.yml"
+kubectl apply -f "./namespaces/observability/node-exporter/daemon-set.node-exporter.yml"
 
 # Jellyfin
-kubectl apply -f "./services/jellyfin/persistent-volume-claim.media-library.yml"
-kubectl apply -f "./services/jellyfin/persistent-volume-claim.jellyfin-config.yml"
-kubectl apply -f "./services/jellyfin/deployment.jellyfin.yml"
-kubectl apply -f "./services/jellyfin/service.jellyfin.yml"
-kubectl apply -f "./services/jellyfin/ingress.jellyfin.yml"
-kubectl apply -f "./services/jellyfin/cron-job.jellyfin-config-backup.yml"
+kubectl apply -f "./namespaces/jellyfin/jellyfin/persistent-volume-claim.media-library.yml"
+kubectl apply -f "./namespaces/jellyfin/jellyfin/persistent-volume-claim.jellyfin-config.yml"
+kubectl apply -f "./namespaces/jellyfin/jellyfin/deployment.jellyfin.yml"
+kubectl apply -f "./namespaces/jellyfin/jellyfin/service.jellyfin.yml"
+kubectl apply -f "./namespaces/jellyfin/jellyfin/ingress.jellyfin.yml"
+kubectl apply -f "./namespaces/jellyfin/jellyfin/cron-job.jellyfin-config-backup.yml"
 
 # Job Listing Data Manager
-kubectl apply -f "./services/job-listing-data-manager/config-map.job-listing-data-manager-config.yml"
-kubectl apply -f "./services/job-listing-data-manager/persistent-volume-claim.postgres-data.yml"
-kubectl apply -f "./services/job-listing-data-manager/deployment.postgres.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-data-manager/config-map.job-listing-data-manager-config.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-data-manager/persistent-volume-claim.postgres-data.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-data-manager/deployment.postgres.yml"
 kubectl wait --for=condition=Ready pod -l app=postgres -n job-listing --timeout=120s
-kubectl apply -f "./services/job-listing-data-manager/service.postgres.yml"
-kubectl apply -f "./services/job-listing-data-manager/persistent-volume-claim.job-listing-data-manager-config.yml"
-kubectl apply -f "./services/job-listing-data-manager/deployment.job-listing-data-manager.yml"
-kubectl apply -f "./services/job-listing-data-manager/service.job-listing-data-manager.yml"
-kubectl apply -f "./services/job-listing-data-manager/ingress.job-listing-data-manager.yml"
-kubectl apply -f "./services/job-listing-data-manager/cron-job.job-listing-data-manager-config-backup.yml"
-kubectl apply -f "./services/job-listing-data-manager/cron-job.job-listing-data-manager-postgres-backup.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-data-manager/service.postgres.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-data-manager/persistent-volume-claim.job-listing-data-manager-config.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-data-manager/deployment.job-listing-data-manager.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-data-manager/service.job-listing-data-manager.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-data-manager/ingress.job-listing-data-manager.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-data-manager/cron-job.job-listing-data-manager-config-backup.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-data-manager/cron-job.job-listing-data-manager-postgres-backup.yml"
 
 # Job Listing GUI
-kubectl apply -f "./services/job-listing-gui/deployment.job-listing-gui.yml"
-kubectl apply -f "./services/job-listing-gui/service.job-listing-gui.yml"
-kubectl apply -f "./services/job-listing-gui/ingress.job-listing-gui.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-gui/deployment.job-listing-gui.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-gui/service.job-listing-gui.yml"
+kubectl apply -f "./namespaces/job-listing/job-listing-gui/ingress.job-listing-gui.yml"
 
 # Prometheus
-kubectl apply -f "./services/prometheus/persistent-volume-claim.prometheus-data.yml"
-kubectl apply -f "./services/prometheus/service-account.prometheus.yml"
-kubectl apply -f "./services/prometheus/cluster-role.prometheus.yml"
-kubectl apply -f "./services/prometheus/cluster-role-binding.prometheus.yml"
-kubectl apply -f "./services/prometheus/config-map.prometheus-config.yml"
-kubectl apply -f "./services/prometheus/deployment.prometheus.yml"
-kubectl apply -f "./services/prometheus/service.prometheus.yml"
-kubectl apply -f "./services/prometheus/ingress.prometheus.yml"
-kubectl apply -f "./services/prometheus/cron-job.prometheus-data-backup.yml"
+kubectl apply -f "./namespaces/observability/prometheus/persistent-volume-claim.prometheus-data.yml"
+kubectl apply -f "./namespaces/observability/prometheus/service-account.prometheus.yml"
+kubectl apply -f "./namespaces/observability/prometheus/cluster-role.prometheus.yml"
+kubectl apply -f "./namespaces/observability/prometheus/cluster-role-binding.prometheus.yml"
+kubectl apply -f "./namespaces/observability/prometheus/config-map.prometheus-config.yml"
+kubectl apply -f "./namespaces/observability/prometheus/deployment.prometheus.yml"
+kubectl apply -f "./namespaces/observability/prometheus/service.prometheus.yml"
+kubectl apply -f "./namespaces/observability/prometheus/ingress.prometheus.yml"
+kubectl apply -f "./namespaces/observability/prometheus/cron-job.prometheus-data-backup.yml"
 
 # Grafana
-kubectl apply -f "./services/grafana/persistent-volume-claim.grafana-data.yml"
-kubectl apply -f "./services/grafana/deployment.grafana.yml"
-kubectl apply -f "./services/grafana/service.grafana.yml"
-kubectl apply -f "./services/grafana/ingress.grafana.yml"
-kubectl apply -f "./services/grafana/cron-job.grafana-data-backup.yml"
+kubectl apply -f "./namespaces/observability/grafana/persistent-volume-claim.grafana-data.yml"
+kubectl apply -f "./namespaces/observability/grafana/deployment.grafana.yml"
+kubectl apply -f "./namespaces/observability/grafana/service.grafana.yml"
+kubectl apply -f "./namespaces/observability/grafana/ingress.grafana.yml"
+kubectl apply -f "./namespaces/observability/grafana/cron-job.grafana-data-backup.yml"
 
 # SC2 Data Manager
-kubectl apply -f "./services/sc2-data-manager/config-map.sc2-data-manager.yml"
-kubectl apply -f "./services/sc2-data-manager/persistent-volume-claim.sc2-data-manager-db.yml"
-kubectl apply -f "./services/sc2-data-manager/persistent-volume-claim.sc2-data-manager-game-files.yml"
-kubectl apply -f "./services/sc2-data-manager/persistent-volume-claim.sc2-data-manager-config.yml"
-kubectl apply -f "./services/sc2-data-manager/deployment.sc2-data-manager.yml"
-kubectl apply -f "./services/sc2-data-manager/service.sc2-data-manager.yml"
-kubectl apply -f "./services/sc2-data-manager/ingress.sc2-data-manager.yml"
-kubectl apply -f "./services/sc2-data-manager/cron-job.sc2-data-manager-config-backup.yml"
-kubectl apply -f "./services/sc2-data-manager/cron-job.sc2-data-manager-db-backup.yml"
-kubectl apply -f "./services/sc2-data-manager/cron-job.sc2-data-manager-game-files-backup.yml"
+kubectl apply -f "./namespaces/sc2/sc2-data-manager/config-map.sc2-data-manager.yml"
+kubectl apply -f "./namespaces/sc2/sc2-data-manager/persistent-volume-claim.sc2-data-manager-db.yml"
+kubectl apply -f "./namespaces/sc2/sc2-data-manager/persistent-volume-claim.sc2-data-manager-game-files.yml"
+kubectl apply -f "./namespaces/sc2/sc2-data-manager/persistent-volume-claim.sc2-data-manager-config.yml"
+kubectl apply -f "./namespaces/sc2/sc2-data-manager/deployment.sc2-data-manager.yml"
+kubectl apply -f "./namespaces/sc2/sc2-data-manager/service.sc2-data-manager.yml"
+kubectl apply -f "./namespaces/sc2/sc2-data-manager/ingress.sc2-data-manager.yml"
+kubectl apply -f "./namespaces/sc2/sc2-data-manager/cron-job.sc2-data-manager-config-backup.yml"
+kubectl apply -f "./namespaces/sc2/sc2-data-manager/cron-job.sc2-data-manager-db-backup.yml"
+kubectl apply -f "./namespaces/sc2/sc2-data-manager/cron-job.sc2-data-manager-game-files-backup.yml"

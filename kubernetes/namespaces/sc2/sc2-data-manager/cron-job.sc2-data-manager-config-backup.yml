@@ -13,7 +13,6 @@ spec:
       backoffLimit: 2
       template:
         spec:
-          restartPolicy: OnFailure
           containers:
             - name: backup
               image: ghcr.io/coreymerritt/rsync:1.0.0
@@ -28,6 +27,9 @@ spec:
                   mountPath: /destination
                 - name: backup
                   mountPath: /backup
+          imagePullSecrets:
+            - name: ghcr
+          restartPolicy: OnFailure
           volumes:
             - name: source
               persistentVolumeClaim:

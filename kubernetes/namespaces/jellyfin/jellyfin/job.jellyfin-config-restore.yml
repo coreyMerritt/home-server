@@ -1,13 +1,12 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: job-listing-data-manager-config-restore
-  namespace: job-listing
+  name: jellyfin-config-restore
+  namespace: jellyfin
 spec:
   backoffLimit: 2
   template:
     spec:
-      restartPolicy: OnFailure
       containers:
         - name: restore
           image: ghcr.io/coreymerritt/rsync:1.0.0
@@ -22,15 +21,18 @@ spec:
               mountPath: /destination
             - name: backup
               mountPath: /backup
+      imagePullSecrets:
+        - name: ghcr
+      restartPolicy: OnFailure
       volumes:
         - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/job-listing-data-manager/config
+            path: /misc/prod-data-backups/jellyfin/config
         - name: destination
           persistentVolumeClaim:
-            claimName: job-listing-data-manager-config
-        - name: backup
+            claimName: jellyfin-config
+        - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/job-listing-data-manager/config.deleted-during-restore
+            path: /misc/prod-data-backups/jellyfin/config.deleted-during-restore

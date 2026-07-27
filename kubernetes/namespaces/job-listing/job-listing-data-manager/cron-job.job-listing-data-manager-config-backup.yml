@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: prometheus-data-backup
-  namespace: observability
+  name: job-listing-data-manager-config-backup
+  namespace: job-listing
 spec:
-  schedule: "0 4 * * *"
+  schedule: "0 2 * * *"
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
   concurrencyPolicy: Forbid
@@ -13,7 +13,6 @@ spec:
       backoffLimit: 2
       template:
         spec:
-          restartPolicy: OnFailure
           containers:
             - name: backup
               image: ghcr.io/coreymerritt/rsync:1.0.0
@@ -28,15 +27,18 @@ spec:
                   mountPath: /destination
                 - name: backup
                   mountPath: /backup
+          imagePullSecrets:
+            - name: ghcr
+          restartPolicy: OnFailure
           volumes:
             - name: source
               persistentVolumeClaim:
-                claimName: prometheus-data
+                claimName: job-listing-data-manager-config
             - name: destination
               nfs:
                 server: nfs-server.lan
-                path: /misc/prod-data-backups/prometheus/data
+                path: /misc/prod-data-backups/job-listing-data-manager/config
             - name: backup
               nfs:
                 server: nfs-server.lan
-                path: /misc/prod-data-backups/prometheus/data.deleted
+                path: /misc/prod-data-backups/job-listing-data-manager/config.deleted

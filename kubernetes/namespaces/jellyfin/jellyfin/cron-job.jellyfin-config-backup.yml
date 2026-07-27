@@ -1,10 +1,10 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: sc2-data-manager-db-backup
-  namespace: sc2
+  name: jellyfin-config-backup
+  namespace: jellyfin
 spec:
-  schedule: "0 6 * * *"
+  schedule: "0 1 * * *"
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
   concurrencyPolicy: Forbid
@@ -13,7 +13,6 @@ spec:
       backoffLimit: 2
       template:
         spec:
-          restartPolicy: OnFailure
           containers:
             - name: backup
               image: ghcr.io/coreymerritt/rsync:1.0.0
@@ -28,15 +27,18 @@ spec:
                   mountPath: /destination
                 - name: backup
                   mountPath: /backup
+          imagePullSecrets:
+            - name: ghcr
+          restartPolicy: OnFailure
           volumes:
             - name: source
               persistentVolumeClaim:
-                claimName: sc2-data-manager-db
+                claimName: jellyfin-config
             - name: destination
               nfs:
                 server: nfs-server.lan
-                path: /misc/prod-data-backups/sc2-data-manager/db
+                path: /misc/prod-data-backups/jellyfin/config
             - name: backup
               nfs:
                 server: nfs-server.lan
-                path: /misc/prod-data-backups/sc2-data-manager/db.deleted
+                path: /misc/prod-data-backups/jellyfin/config.deleted

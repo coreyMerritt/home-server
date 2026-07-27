@@ -1,13 +1,12 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: jellyfin-config-restore
-  namespace: jellyfin
+  name: grafana-data-restore
+  namespace: observability
 spec:
   backoffLimit: 2
   template:
     spec:
-      restartPolicy: OnFailure
       containers:
         - name: restore
           image: ghcr.io/coreymerritt/rsync:1.0.0
@@ -22,15 +21,18 @@ spec:
               mountPath: /destination
             - name: backup
               mountPath: /backup
+      imagePullSecrets:
+        - name: ghcr
+      restartPolicy: OnFailure
       volumes:
         - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/jellyfin/config
+            path: /misc/prod-data-backups/grafana/data
         - name: destination
           persistentVolumeClaim:
-            claimName: jellyfin-config
+            claimName: grafana-data
         - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/jellyfin/config.deleted-during-restore
+            path: /misc/prod-data-backups/grafana/data.deleted-during-restore

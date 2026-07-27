@@ -1,13 +1,12 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: sc2-data-manager-game-files-restore
-  namespace: sc2
+  name: prometheus-data-restore
+  namespace: observability
 spec:
   backoffLimit: 2
   template:
     spec:
-      restartPolicy: OnFailure
       containers:
         - name: restore
           image: ghcr.io/coreymerritt/rsync:1.0.0
@@ -22,15 +21,18 @@ spec:
               mountPath: /destination
             - name: backup
               mountPath: /backup
+      imagePullSecrets:
+        - name: ghcr
+      restartPolicy: OnFailure
       volumes:
         - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/sc2-data-manager/game-files
+            path: /misc/prod-data-backups/prometheus/data
         - name: destination
           persistentVolumeClaim:
-            claimName: sc2-data-manager-game-files
+            claimName: prometheus-data
         - name: backup
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/sc2-data-manager/game-files.deleted-during-restore
+            path: /misc/prod-data-backups/prometheus/data.deleted-during-restore
