@@ -37,8 +37,8 @@ spec:
             - name: destination
               nfs:
                 server: nfs-server.lan
-                path: /misc/prod-data-backups-nfs/grafana/data
+                path: /misc/prod-data-backups/grafana/data
             - name: backup
               nfs:
                 server: nfs-server.lan
-                path: /misc/prod-data-backups-nfs/grafana/data.deleted
+                path: /misc/prod-data-backups/grafana/data.deleted
