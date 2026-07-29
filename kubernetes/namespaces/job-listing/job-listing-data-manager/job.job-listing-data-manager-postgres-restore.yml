@@ -14,45 +14,28 @@ spec:
   backoffLimit: 2
   template:
     spec:
-      restartPolicy: OnFailure
       containers:
         - name: restore
-          image: postgres:18
-          command:
-            - sh
-            - -c
-            - |
-              set -euo pipefail
-              FILE=$(ls -t "${SOURCE}"/*.dump | head -n1)
-              echo "Restoring from: ${FILE}"
-              PGPASSWORD="$POSTGRES_PASSWORD" pg_restore \
-                -h "$POSTGRES_HOST" \
-                -U "$POSTGRES_USER" \
-                -d "$POSTGRES_DB" \
-                --clean \
-                --if-exists \
-                --no-owner \
-                -v \
-                "$FILE"
-              echo "Restore complete: $(date)"
+          image: ghcr.io/coreymerritt/postgres-restore:1.0.0
           env:
-            - name: SOURCE
-              value: "/prod-data-backups/job-listing-data-manager/postgres"
-            - name: TZ
-              value: "America/New_York"
             - name: POSTGRES_HOST
               value: "postgres"
+            - name: TZ
+              value: "America/New_York"
           envFrom:
             - configMapRef:
                 name: job-listing-data-manager
             - secretRef:
                 name: job-listing-data-manager
           volumeMounts:
-            - name: prod-data-backups
-              mountPath: /prod-data-backups
+            - name: source
+              mountPath: /source
               readOnly: true
+      imagePullSecrets:
+        - name: ghcr
+      restartPolicy: OnFailure
       volumes:
-        - name: prod-data-backups
+        - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups
+            path: /misc/prod-data-backups/job-listing-data-manager/postgres
