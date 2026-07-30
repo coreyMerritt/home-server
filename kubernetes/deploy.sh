@@ -133,3 +133,7 @@ kubectl apply -f "./namespaces/sc2/sc2-data-manager/ingress.sc2-data-manager.yml
 kubectl apply -f "./namespaces/sc2/sc2-data-manager/cron-job.sc2-data-manager-config-backup.yml"
 kubectl apply -f "./namespaces/sc2/sc2-data-manager/cron-job.sc2-data-manager-db-backup.yml"
 kubectl apply -f "./namespaces/sc2/sc2-data-manager/cron-job.sc2-data-manager-game-files-backup.yml"
+
+# Printer
+kubectl apply -f "./namespaces/printer/printer-maintenance/config-map.printer-maintenance.yml"
+kubectl apply -f "./namespaces/printer/printer-maintenance/cron-job.printer-maintenance.yml"

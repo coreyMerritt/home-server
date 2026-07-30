@@ -37,8 +37,8 @@ spec:
             - name: destination
               nfs:
                 server: nfs-server.lan
-                path: /misc/prod-data-backups/sc2-data-manager/db
+                path: /misc/prod-data/backups/sc2-data-manager/db
             - name: backup
               nfs:
                 server: nfs-server.lan
-                path: /misc/prod-data-backups/sc2-data-manager/db.deleted
+                path: /misc/prod-data/backups/sc2-data-manager/db.deleted

@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: printer-maintenance
+  namespace: printer
+spec:
+  schedule: "0 15 * * 0"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          containers:
+            - name: printer-maintenance
+              image: ghcr.io/coreymerritt/printer-maintenance:2.0.0
+              env:
+                - name: TZ
+                  value: "America/New_York"
+              envFrom:
+                - configMapRef:
+                    name: printer-maintenance
+              volumeMounts:
+                - name: printer-maintenance-bitmap-images
+                  mountPath: /printer-maintenance-bitmap-images
+          imagePullSecrets:
+            - name: ghcr
+          restartPolicy: OnFailure
+          volumes:
+            - name: printer-maintenance-bitmap-images
+              nfs:
+                server: nfs-server.lan
+                path: /misc/prod-data/printer-maintenance-bitmap-images

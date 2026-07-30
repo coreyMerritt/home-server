@@ -28,11 +28,11 @@ spec:
         - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/prometheus/data
+            path: /misc/prod-data/backups/prometheus/data
         - name: destination
           persistentVolumeClaim:
             claimName: prometheus-data
         - name: backup
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/prometheus/data.deleted-during-restore
+            path: /misc/prod-data/backups/prometheus/data.deleted-during-restore

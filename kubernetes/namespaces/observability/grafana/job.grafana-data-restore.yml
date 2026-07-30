@@ -28,11 +28,11 @@ spec:
         - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/grafana/data
+            path: /misc/prod-data/backups/grafana/data
         - name: destination
           persistentVolumeClaim:
             claimName: grafana-data
         - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/grafana/data.deleted-during-restore
+            path: /misc/prod-data/backups/grafana/data.deleted-during-restore

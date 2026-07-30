@@ -28,11 +28,11 @@ spec:
         - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/job-listing-data-manager/config
+            path: /misc/prod-data/backups/job-listing-data-manager/config
         - name: destination
           persistentVolumeClaim:
             claimName: job-listing-data-manager-config
         - name: backup
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/job-listing-data-manager/config.deleted-during-restore
+            path: /misc/prod-data/backups/job-listing-data-manager/config.deleted-during-restore

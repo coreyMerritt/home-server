@@ -28,11 +28,11 @@ spec:
         - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/sc2-data-manager/game-files
+            path: /misc/prod-data/backups/sc2-data-manager/game-files
         - name: destination
           persistentVolumeClaim:
             claimName: sc2-data-manager-game-files
         - name: backup
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/sc2-data-manager/game-files.deleted-during-restore
+            path: /misc/prod-data/backups/sc2-data-manager/game-files.deleted-during-restore

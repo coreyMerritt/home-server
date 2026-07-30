@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: printer-maintenance
+  namespace: printer
+data:
+  BITMAP_IMAGE_DIRECTORY: "/printer-maintenance-bitmap-images"
+  COMPLETED_BITMAP_IMAGE_DIRECTORY: "/printer-maintenance-bitmap-images/completed"
+  ERRORED_BITMAP_IMAGE_DIRECTORY: "/printer-maintenance-bitmap-images/errored"
+  PRINTER_ADDRESS: "shared-printer.lan"
+  PRINTER_NAME: "EPSON_ET_2760_Series"

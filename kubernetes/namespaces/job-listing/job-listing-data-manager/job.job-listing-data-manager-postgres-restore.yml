@@ -38,4 +38,4 @@ spec:
         - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/job-listing-data-manager/postgres
+            path: /misc/prod-data/backups/job-listing-data-manager/postgres

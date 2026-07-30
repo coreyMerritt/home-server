@@ -28,11 +28,11 @@ spec:
         - name: source
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/sc2-data-manager/db
+            path: /misc/prod-data/backups/sc2-data-manager/db
         - name: destination
           persistentVolumeClaim:
             claimName: sc2-data-manager-db
         - name: backup
           nfs:
             server: nfs-server.lan
-            path: /misc/prod-data-backups/sc2-data-manager/db.deleted-during-restore
+            path: /misc/prod-data/backups/sc2-data-manager/db.deleted-during-restore

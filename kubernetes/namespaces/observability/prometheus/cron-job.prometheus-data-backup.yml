@@ -37,8 +37,8 @@ spec:
             - name: destination
               nfs:
                 server: nfs-server.lan
-                path: /misc/prod-data-backups/prometheus/data
+                path: /misc/prod-data/backups/prometheus/data
             - name: backup
               nfs:
                 server: nfs-server.lan
-                path: /misc/prod-data-backups/prometheus/data.deleted
+                path: /misc/prod-data/backups/prometheus/data.deleted
