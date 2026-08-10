@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trg
+  namespace: trg
+data:
+  TRG_CHANNELS_JSON_PATH: /secret/configs/channels.json
+  TRG_OUTPUT_FILES_DIR: /data

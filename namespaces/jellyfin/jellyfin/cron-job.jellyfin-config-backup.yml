@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: jellyfin-config-backup
+  namespace: jellyfin
+spec:
+  schedule: "0 1 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          containers:
+            - name: backup
+              image: ghcr.io/coreymerritt/rsync:1.0.0
+              env:
+                - name: TZ
+                  value: "America/New_York"
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 512Mi
+                limits:
+                  cpu: 500m
+                  memory: 1Gi
+              volumeMounts:
+                - name: source
+                  mountPath: /source
+                  readOnly: true
+                - name: destination
+                  mountPath: /destination
+                - name: backup
+                  mountPath: /backup
+          imagePullSecrets:
+            - name: ghcr
+          restartPolicy: OnFailure
+          volumes:
+            - name: source
+              persistentVolumeClaim:
+                claimName: jellyfin-config
+            - name: destination
+              nfs:
+                server: nfs-server.lan
+                path: /misc/prod-data/backups/jellyfin/config
+            - name: backup
+              nfs:
+                server: nfs-server.lan
+                path: /misc/prod-data/backups/jellyfin/config.deleted

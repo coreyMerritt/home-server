@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mobile-photos-backup
+  namespace: mobile
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      containers:
+        - name: backup
+          image: ghcr.io/coreymerritt/rsync:1.0.0
+          env:
+            - name: TZ
+              value: "America/New_York"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+          volumeMounts:
+            - name: source
+              mountPath: /source
+              readOnly: true
+            - name: destination
+              mountPath: /destination
+            - name: backup
+              mountPath: /backup
+      imagePullSecrets:
+        - name: ghcr
+      restartPolicy: OnFailure
+      volumes:
+        - name: source
+          nfs:
+            server: ukko-pixel-10-pro.lan
+            path: ...?
+        - name: destination
+          nfs:
+            server: nfs-server.lan
+            path: /misc/prod-data/backups/mobile/photos
+        - name: backup
+          nfs:
+            server: nfs-server.lan
+            path: /misc/prod-data/backups/mobile/photos.deleted-during-backup

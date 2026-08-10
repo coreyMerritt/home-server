@@ -1,0 +1,48 @@
+# Before running: scale down the app so nothing is writing to (or holding
+# connections open against) the database during the restore --
+#   kubectl scale deployment/job-listing-data-manager -n job-listing --replicas=0
+#
+# After the restore completes and looks correct:
+#   kubectl scale deployment/job-listing-data-manager -n job-listing --replicas=1
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-listing-data-manager-postgres-restore
+  namespace: job-listing
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      containers:
+        - name: restore
+          image: ghcr.io/coreymerritt/postgres-restore:1.0.0
+          env:
+            - name: POSTGRES_HOST
+              value: "postgres"
+            - name: TZ
+              value: "America/New_York"
+          envFrom:
+            - configMapRef:
+                name: job-listing-data-manager
+            - secretRef:
+                name: job-listing-data-manager
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+          volumeMounts:
+            - name: source
+              mountPath: /source
+              readOnly: true
+      imagePullSecrets:
+        - name: ghcr
+      restartPolicy: OnFailure
+      volumes:
+        - name: source
+          nfs:
+            server: nfs-server.lan
+            path: /misc/prod-data/backups/job-listing-data-manager/postgres

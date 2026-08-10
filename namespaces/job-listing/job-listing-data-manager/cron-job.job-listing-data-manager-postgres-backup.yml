@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: job-listing-data-manager-postgres-backup
+  namespace: job-listing
+spec:
+  schedule: "0 3 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          containers:
+            - name: backup
+              image: ghcr.io/coreymerritt/postgres-backup:1.0.1
+              env:
+                - name: POSTGRES_HOST
+                  value: "postgres"
+                - name: TZ
+                  value: "America/New_York"
+              envFrom:
+                - configMapRef:
+                    name: job-listing-data-manager
+                - secretRef:
+                    name: job-listing-data-manager
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 512Mi
+                limits:
+                  cpu: 500m
+                  memory: 1Gi
+              volumeMounts:
+                - name: destination
+                  mountPath: /destination
+          imagePullSecrets:
+            - name: ghcr
+          restartPolicy: OnFailure
+          volumes:
+            - name: destination
+              nfs:
+                server: nfs-server.lan
+                path: /misc/prod-data/backups/job-listing-data-manager/postgres
