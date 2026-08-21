@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tm-django
+  namespace: tm
+spec:
+  selector:
+    app: tm-django
+  type: ClusterIP
+  ports:
+    - port: 8000
+      targetPort: 8000

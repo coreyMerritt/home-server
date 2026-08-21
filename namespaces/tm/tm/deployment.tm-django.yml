@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tm-django
+  namespace: tm
+  labels:
+    app: tm-django
+spec:
+  replicas: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: tm-django
+  template:
+    metadata:
+      labels:
+        app: tm-django
+    spec:
+      imagePullSecrets:
+        - name: ghcr
+      containers:
+        - name: tm-django
+          image: ghcr.io/coreymerritt/tm.django:d856c401-9240-43d2-b324-9f07a199c4a0
+          envFrom:
+            - configMapRef:
+                name: tm-django
+            - configMapRef:
+                name: tm-global
+            - secretRef:
+                name: tm-django
+            - secretRef:
+                name: tm-global
+          ports:
+            - containerPort: 8000
+              name: http
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi

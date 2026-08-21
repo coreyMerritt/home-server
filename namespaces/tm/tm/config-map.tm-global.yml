@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tm-global
+  namespace: tm
+data:
+  TM_GLOBAL_DATA_DIR: "/mnt/misc/prod-data/tm"
+  TM_GLOBAL_DJANGO_ADDRESS: "ukko-development-pc.lan"
+  TM_GLOBAL_DJANGO_PORT: "8000"
+  TM_GLOBAL_DJANGO_PROTOCOL: "http"
+  TM_GLOBAL_RABBIT_MQ_ADDRESS: "ukko-development-pc.lan"
+  TZ: "America/Detroit"
