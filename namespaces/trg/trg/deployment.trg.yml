@@ -21,7 +21,7 @@ spec:
         - name: ghcr
       containers:
         - name: trg
-          image: ghcr.io/coreymerritt/trg:1.0.2
+          image: ghcr.io/coreymerritt/trg:20013287-446f-495b-83c6-2051c5d3494e
           env:
             - name: TZ
               value: "America/New_York"
