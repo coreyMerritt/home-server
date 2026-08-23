@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: job-listing-data-manager-postgres-backup
+  name: postgres-data-backup
   namespace: job-listing
 spec:
   schedule: "0 3 * * *"

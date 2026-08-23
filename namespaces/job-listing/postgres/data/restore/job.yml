@@ -8,7 +8,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: job-listing-data-manager-postgres-restore
+  name: postgres-data-restore
   namespace: job-listing
 spec:
   backoffLimit: 2
