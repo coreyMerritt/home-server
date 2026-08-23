@@ -39,10 +39,7 @@ spec:
               memory: 1Gi
           volumeMounts:
             - name: secret-configs-trg
-              mountPath: /secret/configs
-              readOnly: true
-            - name: secret-ssh-trg
-              mountPath: /root/.ssh
+              mountPath: /secrets
               readOnly: true
             - name: data
               mountPath: /data
@@ -50,10 +47,6 @@ spec:
         - name: secret-configs-trg
           secret:
             secretName: secret-configs-trg
-        - name: secret-ssh-trg
-          secret:
-            secretName: secret-ssh-trg
-            defaultMode: 0400
         - name: data
           nfs:
             server: nfs-server.lan
