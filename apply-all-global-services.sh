@@ -37,8 +37,8 @@ kubectl wait \
   --timeout=300s \
   --for=condition=Ready "pods" \
   --namespace "metallb-system" 
-kubectl apply -f "./namespaces/metallb-system/metallb/ip-address-pool.homelab-pool.yml"
-kubectl apply -f "./namespaces/metallb-system/metallb/l2-advertisement.homelab-l2.yml"
+kubectl apply -f "./namespaces/metallb-system/ip-address-pool.yml"
+kubectl apply -f "./namespaces/metallb-system/l2-advertisement.yml"
 
 # Ingress-xginx
 helm repo add "ingress-nginx" "https://kubernetes.github.io/ingress-nginx"

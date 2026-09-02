@@ -13,6 +13,16 @@ spec:
       backoffLimit: 2
       template:
         spec:
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - sc2-data-manager
+                  topologyKey: kubernetes.io/hostname
           containers:
             - name: backup
               image: ghcr.io/coreymerritt/rsync:1.0.0

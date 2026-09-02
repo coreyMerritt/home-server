@@ -3,23 +3,26 @@
 set -xeuo pipefail
 
 resource_names=(
-  "pvc.yml"
-  "cron-job.yml"
+  "cluster-role.yml"
+  "cluster-role-binding.yml"
   "config-map.yml"
+  "cron-job.yml"
+  "daemon-set.yml"
+  "deployment.yml"
+  "ingress.yml"
+  "ip-address-pool.yml"
+  "job.yml"
+  "l2-advertisement.yml"
   "namespace.yml"
+  "pvc.yml"
+  "role.yml"
+  "role-binding.yml"
   "secret.dockerconfigjson.yml.template"
   "secret.opaque.yml.template"
-  "deployment.yml"
-  "service.yml"
-  "job.yml"
-  "ingress.yml"
   "secret.tls.yml.template"
-  "ip-address-pool.yml"
-  "l2-advertisement.yml"
-  "daemon-set.yml"
+  "service.yml"
+  "stateful-set.yml"
   "service-account.yml"
-  "cluster-role-binding.yml"
-  "cluster-role.yml"
 )
 
 cmd=(find . -name "*.yml*")

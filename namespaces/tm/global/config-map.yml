@@ -8,5 +8,5 @@ data:
   TM_GLOBAL_DJANGO_ADDRESS: "ukko-development-pc.lan"
   TM_GLOBAL_DJANGO_PORT: "8000"
   TM_GLOBAL_DJANGO_PROTOCOL: "http"
-  TM_GLOBAL_RABBIT_MQ_ADDRESS: "ukko-development-pc.lan"
+  TM_GLOBAL_RABBIT_MQ_ADDRESS: "rabbitmq-headless"
   TZ: "America/Detroit"
