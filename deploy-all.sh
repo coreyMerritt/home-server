@@ -13,7 +13,7 @@ cd "$script_dir"
 bash "./apply-all-namespaces.sh"
 bash "./apply-all-secrets.sh"
 bash "./apply-all-global-services.sh"
-kubectl apply -f "https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/main/deployments/static/nvidia-device-plugin.yml"
+bash "./deploy-nvidia-plugin.sh"
 
 ordered_resource_names=(
   "pvc.yml"
