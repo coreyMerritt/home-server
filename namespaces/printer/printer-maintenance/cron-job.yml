@@ -39,4 +39,4 @@ spec:
             - name: printer-maintenance-bitmap-images
               nfs:
                 server: nfs-server.lan
-                path: /misc/prod-data/printer-maintenance-bitmap-images
+                path: /misc/prod-data/live/printer-maintenance-bitmap-images
