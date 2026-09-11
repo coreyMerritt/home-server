@@ -4,6 +4,6 @@ metadata:
   name: tm-django
   namespace: tm
 data:
-  TM_DJANGO_ALLOWED_HOSTS: "tm.lan,ukko-development-pc.lan,localhost,tm-download-producer,tm-downloader,tm-converter,tm-transcriber,tm-scanner"
+  TM_DJANGO_ALLOWED_HOSTS: "tm-django"
   TM_DJANGO_BIND_ADDRESS: "0.0.0.0"
   TM_DJANGO_DEBUG_MODE: "false"

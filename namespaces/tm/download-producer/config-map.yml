@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tm-download-producer
+  namespace: tm
+data:
+  TM_DOWNLOAD_PRODUCER_COOLDOWN: "60"

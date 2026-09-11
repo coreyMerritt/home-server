@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tm-download-producer
+  namespace: tm
+  labels:
+    app: tm-download-producer
+spec:
+  replicas: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: tm-download-producer
+  template:
+    metadata:
+      labels:
+        app: tm-download-producer
+    spec:
+      imagePullSecrets:
+        - name: ghcr
+      containers:
+        - name: tm-download-producer
+          image: ghcr.io/coreymerritt/tm.download-producer:93826c36-1d86-453f-960d-7f8554862371
+          envFrom:
+            - configMapRef:
+                name: tm-download-producer
+            - configMapRef:
+                name: tm-global
+            - secretRef:
+                name: tm-global
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Gi
