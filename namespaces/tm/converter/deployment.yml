@@ -21,7 +21,7 @@ spec:
         - name: ghcr
       containers:
         - name: tm-converter
-          image: ghcr.io/coreymerritt/tm.converter:2e55dbce-734e-4f12-b4fe-2d94e677b462
+          image: ghcr.io/coreymerritt/tm.converter:ebd0c0fc-5a52-4c00-aa1b-4aae0fce0b3f
           envFrom:
             - configMapRef:
                 name: tm-converter
