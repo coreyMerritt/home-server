@@ -8,5 +8,6 @@ data:
   TM_GLOBAL_DJANGO_ADDRESS: "tm-django"
   TM_GLOBAL_DJANGO_PORT: "8000"
   TM_GLOBAL_DJANGO_PROTOCOL: "http"
-  TM_GLOBAL_RABBIT_MQ_ADDRESS: "rabbitmq-headless"
+  TM_GLOBAL_RABBITMQ_ADDRESS: "rabbitmq-headless"
+  TM_GLOBAL_RABBITMQ_PORT: "5672"
   TZ: "America/Detroit"
