@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tm-downloader
+  namespace: tm
+data:
+  TM_DOWNLOADER_HEARTBEAT: "60"

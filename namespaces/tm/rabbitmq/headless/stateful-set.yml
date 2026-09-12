@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: rabbitmq
+  name: tm-rabbitmq
 spec:
-  serviceName: rabbitmq-headless
+  serviceName: tm-rabbitmq-headless
   replicas: 2
   selector:
     matchLabels:
-      app: rabbitmq
+      app: tm-rabbitmq
   template:
     metadata:
       labels:
-        app: rabbitmq
+        app: tm-rabbitmq
     spec:
-      serviceAccountName: rabbitmq
+      serviceAccountName: tm-rabbitmq
       containers:
-        - name: rabbitmq
+        - name: tm-rabbitmq
           image: rabbitmq:3.13-management
           envFrom:
             - configMapRef:
-                name: rabbitmq
+                name: tm-rabbitmq
             - secretRef:
-                name: rabbitmq
+                name: tm-rabbitmq
           ports:
             - containerPort: 5672
             - containerPort: 15672
@@ -38,7 +38,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: rabbitmq-config
+            name: tm-rabbitmq-config
   volumeClaimTemplates:
     - metadata:
         name: rabbitmq-data
