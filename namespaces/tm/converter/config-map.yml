@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tm-converter
+  namespace: tm
+data:
+  TM_CONVERTER_HEARTBEAT: "60"

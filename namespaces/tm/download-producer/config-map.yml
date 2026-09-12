@@ -5,3 +5,4 @@ metadata:
   namespace: tm
 data:
   TM_DOWNLOAD_PRODUCER_COOLDOWN: "60"
+  TM_DOWNLOAD_PRODUCER_HEARTBEAT: "600"
