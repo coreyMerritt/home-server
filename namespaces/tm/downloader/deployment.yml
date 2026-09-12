@@ -36,3 +36,11 @@ spec:
             limits:
               cpu: 200m
               memory: 256Gi
+          volumeMounts:
+            - name: tm-files
+              mountPath: /mnt/misc/prod-data/live/tm
+      volumes:
+        - name: tm-files
+          nfs:
+            server: nfs-server.lan
+            path: /misc/prod-data/live/tm
