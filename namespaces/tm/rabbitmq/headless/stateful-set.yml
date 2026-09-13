@@ -4,7 +4,7 @@ metadata:
   name: tm-rabbitmq
 spec:
   serviceName: tm-rabbitmq-headless
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: tm-rabbitmq

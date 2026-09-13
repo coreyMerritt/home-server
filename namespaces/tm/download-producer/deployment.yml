@@ -6,7 +6,7 @@ metadata:
   labels:
     app: tm-download-producer
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     type: Recreate
   selector:
