@@ -21,7 +21,7 @@ spec:
         - name: ghcr
       containers:
         - name: tm-downloader
-          image: ghcr.io/coreymerritt/tm.downloader:6306acb4-a22a-4d45-b83c-843242bfdb42
+          image: ghcr.io/coreymerritt/tm.downloader:d2e55cb9-e981-4b06-92c0-0b0d721e4216
           envFrom:
             - configMapRef:
                 name: tm-downloader
