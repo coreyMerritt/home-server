@@ -21,7 +21,7 @@ spec:
         - name: ghcr
       containers:
         - name: tm-download-producer
-          image: ghcr.io/coreymerritt/tm.download-producer:90cf9184-678e-477b-bd52-3d637a6ee6da
+          image: ghcr.io/coreymerritt/tm.download-producer:1b6511db-23b1-471c-82d5-2d12b9787c34
           envFrom:
             - configMapRef:
                 name: tm-download-producer
