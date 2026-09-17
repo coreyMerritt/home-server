@@ -21,6 +21,19 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+      initContainers:
+        - name: install-ytdlp
+          image: curlimages/curl:latest
+          command:
+            - sh
+            - -c
+            - |
+              curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /tools/yt-dlp
+              chmod +x /tools/yt-dlp
+              ln -s /tools/yt-dlp /tools/youtube-dl
+          volumeMounts:
+            - name: tools
+              mountPath: /tools
       containers:
         - name: jellyfin
           image: jellyfin/jellyfin:latest
@@ -41,6 +54,8 @@ spec:
               value: "/usr/lib/jellyfin-ffmpeg/ffmpeg"
             - name: XDG_CACHE_HOME
               value: "/cache"
+            - name: PATH
+              value: "/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
           livenessProbe:
             httpGet:
               path: /health
@@ -66,6 +81,8 @@ spec:
               mountPath: /cache
             - name: media
               mountPath: /media
+            - name: tools
+              mountPath: /tools
       volumes:
         - name: media
           nfs:
@@ -77,3 +94,5 @@ spec:
         - name: cache
           emptyDir:
             sizeLimit: 10Gi
+        - name: tools
+          emptyDir: {}
